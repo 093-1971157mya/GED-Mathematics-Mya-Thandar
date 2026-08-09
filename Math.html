@@ -1,253 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graphing Linear Equations</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-    }
+    <title>GED Mathematics Practice Test</title>
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .question {
-      border: 1px solid #ccc;
-      margin: 25px 0;
-      padding: 20px;
-      border-radius: 8px;
-    }
-
-    .question h2 {
-      margin-top: 0;
-    }
-
-    .equation {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    svg {
-      display: block;
-      margin: auto;
-      background: white;
-      border: 1px solid #aaa;
-      max-width: 100%;
-    }
-
-    .instruction {
-      text-align: center;
-      color: #555;
-      margin-top: 10px;
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                GED Mathematics
+            </div>
 
-  <h1>Graphing Linear Equations</h1>
-
-  <!-- Question 1 -->
-  <div class="question">
-    <h2>Question 1</h2>
-    <div class="equation">Graph y = 3/2 x.</div>
-
-    <svg width="500" height="500" viewBox="0 0 500 500">
-
-      <!-- Grid -->
-      <defs>
-        <pattern id="grid1" width="25" height="25" patternUnits="userSpaceOnUse">
-          <path d="M 25 0 L 0 0 0 25"
-                fill="none"
-                stroke="#d0d0d0"
-                stroke-width="1"/>
-        </pattern>
-      </defs>
-
-      <rect x="50" y="25" width="400" height="400"
-            fill="url(#grid1)"/>
-
-      <!-- Axes -->
-      <line x1="250" y1="25" x2="250" y2="425"
-            stroke="black" stroke-width="2"/>
-
-      <line x1="50" y1="225" x2="450" y2="225"
-            stroke="black" stroke-width="2"/>
-
-      <!-- Arrow heads -->
-      <polygon points="250,20 245,30 255,30"/>
-      <polygon points="455,225 445,220 445,230"/>
-      <polygon points="250,430 245,420 255,420"/>
-      <polygon points="45,225 55,220 55,230"/>
-
-      <!-- X labels -->
-      <text x="440" y="215">x</text>
-
-      <!-- Y labels -->
-      <text x="258" y="35">y</text>
-
-      <!-- Number labels -->
-      <text x="292" y="245">2</text>
-      <text x="342" y="245">4</text>
-      <text x="392" y="245">6</text>
-
-      <text x="205" y="245">-2</text>
-      <text x="155" y="245">-4</text>
-      <text x="105" y="245">-6</text>
-
-      <text x="258" y="175">2</text>
-      <text x="258" y="125">4</text>
-      <text x="258" y="75">6</text>
-
-      <text x="230" y="275">-2</text>
-      <text x="230" y="325">-4</text>
-      <text x="230" y="375">-6</text>
-
-    </svg>
-
-    <p class="instruction">
-      Plot points and draw the line for the equation.
-    </p>
-  </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="#">Practice Tests</a>
+                <a href="#">About</a>
+            </nav>
+        </div>
+    </header>
 
 
-  <!-- Question 2 -->
-  <div class="question">
-    <h2>Question 2</h2>
-    <div class="equation">Graph y = 2x + 1.</div>
+    <!-- Main Content -->
+    <main class="container">
 
-    <svg width="500" height="500" viewBox="0 0 500 500">
+        <section class="page-title">
+            <h1>GED Mathematics Practice Test</h1>
 
-      <defs>
-        <pattern id="grid2" width="25" height="25"
-                 patternUnits="userSpaceOnUse">
-          <path d="M 25 0 L 0 0 0 25"
-                fill="none"
-                stroke="#d0d0d0"
-                stroke-width="1"/>
-        </pattern>
-      </defs>
+            <p>
+                Practice graphing linear equations.
+            </p>
 
-      <rect x="50" y="25" width="400" height="400"
-            fill="url(#grid2)"/>
-
-      <!-- Axes -->
-      <line x1="250" y1="25" x2="250" y2="425"
-            stroke="black" stroke-width="2"/>
-
-      <line x1="50" y1="225" x2="450" y2="225"
-            stroke="black" stroke-width="2"/>
-
-      <polygon points="250,20 245,30 255,30"/>
-      <polygon points="455,225 445,220 445,230"/>
-      <polygon points="250,430 245,420 255,420"/>
-      <polygon points="45,225 55,220 55,230"/>
-
-      <text x="440" y="215">x</text>
-      <text x="258" y="35">y</text>
-
-      <text x="292" y="245">2</text>
-      <text x="342" y="245">4</text>
-      <text x="392" y="245">6</text>
-
-      <text x="205" y="245">-2</text>
-      <text x="155" y="245">-4</text>
-      <text x="105" y="245">-6</text>
-
-      <text x="258" y="175">2</text>
-      <text x="258" y="125">4</text>
-      <text x="258" y="75">6</text>
-
-      <text x="230" y="275">-2</text>
-      <text x="230" y="325">-4</text>
-      <text x="230" y="375">-6</text>
-
-    </svg>
-
-    <p class="instruction">
-      Plot points and draw the line for the equation.
-    </p>
-  </div>
+            <div class="badges">
+                <span>3 Questions</span>
+                <span>Mathematics</span>
+                <span>Automatic Checking</span>
+            </div>
+        </section>
 
 
-  <!-- Question 3 -->
-  <div class="question">
-    <h2>Question 3</h2>
-    <div class="equation">Graph y = -x + 3.</div>
+        <!-- Question 1 -->
+        <section class="question-card">
 
-    <svg width="500" height="500" viewBox="0 0 500 500">
+            <div class="question-number">
+                Question 1
+            </div>
 
-      <defs>
-        <pattern id="grid3" width="25" height="25"
-                 patternUnits="userSpaceOnUse">
-          <path d="M 25 0 L 0 0 0 25"
-                fill="none"
-                stroke="#d0d0d0"
-                stroke-width="1"/>
-        </pattern>
-      </defs>
+            <h2>
+                Graph the equation
+                <span>y = 3/2x</span>
+            </h2>
 
-      <rect x="50" y="25" width="400" height="400"
-            fill="url(#grid3)"/>
+            <p class="instruction">
+                Click at least two points that are on the line.
+            </p>
 
-      <!-- Axes -->
-      <line x1="250" y1="25" x2="250" y2="425"
-            stroke="black" stroke-width="2"/>
+            <!-- Coordinate Graph -->
+            <div class="graph-container">
 
-      <line x1="50" y1="225" x2="450" y2="225"
-            stroke="black" stroke-width="2"/>
+                <canvas
+                    id="graph1"
+                    width="500"
+                    height="500">
+                </canvas>
 
-      <polygon points="250,20 245,30 255,30"/>
-      <polygon points="455,225 445,220 445,230"/>
-      <polygon points="250,430 245,420 255,420"/>
-      <polygon points="45,225 55,220 55,230"/>
+            </div>
 
-      <text x="440" y="215">x</text>
-      <text x="258" y="35">y</text>
+            <div class="buttons">
+                <button onclick="checkQuestion(1)">
+                    Check Answer
+                </button>
 
-      <text x="292" y="245">2</text>
-      <text x="342" y="245">4</text>
-      <text x="392" y="245">6</text>
+                <button
+                    class="clear"
+                    onclick="clearGraph(1)">
+                    Clear
+                </button>
+            </div>
 
-      <text x="205" y="245">-2</text>
-      <text x="155" y="245">-4</text>
-      <text x="105" y="245">-6</text>
+            <div id="result1" class="result"></div>
 
-      <text x="258" y="175">2</text>
-      <text x="258" y="125">4</text>
-      <text x="258" y="75">6</text>
+        </section>
 
-      <text x="230" y="275">-2</text>
-      <text x="230" y="325">-4</text>
-      <text x="230" y="375">-6</text>
 
-    </svg>
+        <!-- Question 2 -->
+        <section class="question-card">
 
-    <p class="instruction">
-      Plot points and draw the line for the equation.
-    </p>
+            <div class="question-number">
+                Question 2
+            </div>
 
-  </div>
+            <h2>
+                Graph the equation
+                <span>y = 2x + 1</span>
+            </h2>
 
-</div>
+            <p class="instruction">
+                Click at least two points that are on the line.
+            </p>
+
+            <div class="graph-container">
+
+                <canvas
+                    id="graph2"
+                    width="500"
+                    height="500">
+                </canvas>
+
+            </div>
+
+            <div class="buttons">
+                <button onclick="checkQuestion(2)">
+                    Check Answer
+                </button>
+
+                <button
+                    class="clear"
+                    onclick="clearGraph(2)">
+                    Clear
+                </button>
+            </div>
+
+            <div id="result2" class="result"></div>
+
+        </section>
+
+
+        <!-- Question 3 -->
+        <section class="question-card">
+
+            <div class="question-number">
+                Question 3
+            </div>
+
+            <h2>
+                Graph the equation
+                <span>y = -x + 3</span>
+            </h2>
+
+            <p class="instruction">
+                Click at least two points that are on the line.
+            </p>
+
+            <div class="graph-container">
+
+                <canvas
+                    id="graph3"
+                    width="500"
+                    height="500">
+                </canvas>
+
+            </div>
+
+            <div class="buttons">
+                <button onclick="checkQuestion(3)">
+                    Check Answer
+                </button>
+
+                <button
+                    class="clear"
+                    onclick="clearGraph(3)">
+                    Clear
+                </button>
+            </div>
+
+            <div id="result3" class="result"></div>
+
+        </section>
+
+
+        <!-- Submit -->
+        <section class="submit-section">
+
+            <button
+                class="submit-button"
+                onclick="submitTest()">
+
+                Submit Test
+
+            </button>
+
+            <h2 id="score">
+                Score: Not submitted
+            </h2>
+
+            <p id="final-message">
+                Complete all three questions.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
 
 </body>
 </html>
