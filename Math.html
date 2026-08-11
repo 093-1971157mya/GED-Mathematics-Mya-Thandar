@@ -1,175 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>GED Mathematics Practice Test</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GED Math Practice Test - 30 Questions</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-    <div class="header-container">
+  <div class="container">
 
-        <div class="logo">
-            GED Mathematics
-        </div>
+    <header>
+      <h1>GED Mathematics Practice Test</h1>
+      <p>Functions • Linear Equations • Graphing</p>
 
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Practice Test</a>
-            <a href="#">Functions</a>
-            <a href="#">Linear Equations</a>
-        </nav>
-
-    </div>
-</header>
-
-
-<main class="container">
-
-    <!-- TITLE -->
-
-    <section class="title-card">
-
-        <h1>GED Mathematics Practice Test</h1>
-
-        <p>
-            Functions, Linear Equations & Graphing
-        </p>
-
-        <div class="badges">
-            <span>30 Questions</span>
-            <span>Multiple Choice</span>
-            <span>Automatic Checking</span>
-        </div>
-
-    </section>
-
-
-    <!-- NAVIGATION -->
-
-    <section class="navigation-card">
-
-        <div class="navigation-row">
-
-            <button
-                class="navigation-button"
-                onclick="previousQuestion()">
-                ← Previous
-            </button>
-
-            <strong id="questionNumber">
-                Question 1 of 30
-            </strong>
-
-            <button
-                class="navigation-button"
-                onclick="nextQuestion()">
-                Next →
-            </button>
-
-        </div>
-
-
-        <div id="questionButtons"
-             class="question-buttons">
-        </div>
-
-
-        <p id="progressText">
-            0 / 30 answered
-        </p>
-
-        <div class="progress">
-            <div id="progressBar"></div>
-        </div>
-
-    </section>
-
-
-    <!-- QUESTIONS -->
-
-    <section id="questions"></section>
-
-
-    <!-- FINAL RESULT -->
-
-    <section class="result-card">
-
-        <button
-            class="submit-button"
-            onclick="submitTest()">
-            Submit Test
-        </button>
-
-        <button
-            class="clear-all-button"
-            onclick="clearAll()">
-            Clear All
-        </button>
-
-        <h2 id="finalScore">
-            Score: Not submitted
-        </h2>
-
-        <p id="finalMessage">
-            Complete the test and submit when you are ready.
-        </p>
-
-    </section>
-
-</main>
-
-
-<script src="script.js"></script>
-<div class="timer-box">
-    Time Remaining:
-    <span id="timer">40</span> seconds
-</div>
-<section class="navigation-card">
-
-    <div class="timer-box">
+      <div class="timer-box">
         Time Remaining:
-        <span id="timer">40</span> seconds
+        <span id="timer">45:00</span>
+      </div>
+    </header>
+
+    <div id="start-screen">
+      <h2>Instructions</h2>
+
+      <ul>
+        <li>30 questions</li>
+        <li>45-minute time limit</li>
+        <li>Questions are shuffled</li>
+        <li>Answer choices are shuffled</li>
+        <li>You can submit only once</li>
+        <li>Your score will appear after submission</li>
+      </ul>
+
+      <button id="startBtn">Start Test</button>
     </div>
 
-    <div class="navigation-row">
+    <form id="quizForm"></form>
 
-        <button
-            class="navigation-button"
-            onclick="previousQuestion()">
-            ← Previous
-        </button>
-
-        <strong id="questionNumber">
-            Question 1 of 30
-        </strong>
-
-        <button
-            class="navigation-button"
-            onclick="nextQuestion()">
-            Next →
-        </button>
-
+    <div id="submit-area">
+      <button id="submitBtn">Submit Test</button>
     </div>
 
-    <div id="questionButtons"
-         class="question-buttons">
-    </div>
+    <div id="result"></div>
 
-    <p id="progressText">
-        0 / 30 answered
-    </p>
+  </div>
 
-    <div class="progress">
-        <div id="progressBar"></div>
-    </div>
-
-</section>
-
+  <script src="script.js"></script>
 </body>
 </html>
