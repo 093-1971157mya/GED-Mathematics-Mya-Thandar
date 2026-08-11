@@ -567,3 +567,36 @@ nav a:hover {
     }
 
 }
+.timer-box {
+    text-align: center;
+
+    background: #fff3cd;
+
+    color: #856404;
+
+    border: 1px solid #ffe69c;
+
+    border-radius: 6px;
+
+    padding: 10px;
+
+    margin-bottom: 12px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+}
+
+#timer {
+    font-size: 24px;
+
+    margin-left: 5px;
+}
+
+.timer-warning {
+    background: #f8d7da;
+
+    color: #842029;
+
+    border-color: #f5c2c7;
+}

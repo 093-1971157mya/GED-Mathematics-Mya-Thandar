@@ -126,6 +126,50 @@
 
 
 <script src="script.js"></script>
+<div class="timer-box">
+    Time Remaining:
+    <span id="timer">40</span> seconds
+</div>
+<section class="navigation-card">
+
+    <div class="timer-box">
+        Time Remaining:
+        <span id="timer">40</span> seconds
+    </div>
+
+    <div class="navigation-row">
+
+        <button
+            class="navigation-button"
+            onclick="previousQuestion()">
+            ← Previous
+        </button>
+
+        <strong id="questionNumber">
+            Question 1 of 30
+        </strong>
+
+        <button
+            class="navigation-button"
+            onclick="nextQuestion()">
+            Next →
+        </button>
+
+    </div>
+
+    <div id="questionButtons"
+         class="question-buttons">
+    </div>
+
+    <p id="progressText">
+        0 / 30 answered
+    </p>
+
+    <div class="progress">
+        <div id="progressBar"></div>
+    </div>
+
+</section>
 
 </body>
 </html>

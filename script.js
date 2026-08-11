@@ -1869,3 +1869,1787 @@ createQuestionButtons();
 showQuestion(0);
 
 updateNavigation();
+/* =====================================================
+   GED MATHEMATICS TEST SETTINGS
+   ===================================================== */
+
+let currentQuestion = 0;
+
+let submitted = false;
+
+let timeLeft = 40;
+
+let timerInterval;
+
+
+/* =====================================================
+   SHUFFLE FUNCTION
+   ===================================================== */
+
+function shuffleArray(array) {
+
+    for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [
+            array[i],
+            array[j]
+        ] =
+        [
+            array[j],
+            array[i]
+        ];
+
+    }
+
+    return array;
+}
+
+
+/* =====================================================
+   PREPARE QUESTIONS
+   ===================================================== */
+
+function prepareQuestions() {
+
+    questions.forEach((question, index) => {
+
+        /*
+            Save original question number.
+            This is useful for graph questions.
+        */
+
+        question.originalNumber =
+            index + 1;
+
+
+        /*
+            Save graph ID before questions
+            are shuffled.
+        */
+
+        if (
+            question.topic === "Graphing"
+        ) {
+
+            question.graphId =
+                index + 1;
+
+        }
+
+
+        /*
+            Find the original correct answer.
+        */
+
+        const correctOption =
+            question.options.find(
+                option =>
+                    option.charAt(0) ===
+                    question.answer
+            );
+
+
+        /*
+            Remove A., B., C., D.
+        */
+
+        question.options =
+            question.options.map(
+                option =>
+                    option.substring(3)
+            );
+
+
+        /*
+            Save correct answer text.
+        */
+
+        question.correctText =
+            correctOption
+                ? correctOption.substring(3)
+                : "";
+
+
+        /*
+            Shuffle answer choices.
+        */
+
+        shuffleArray(
+            question.options
+        );
+
+
+        /*
+            Find new position of correct answer.
+        */
+
+        const correctIndex =
+            question.options.findIndex(
+                option =>
+                    option ===
+                    question.correctText
+            );
+
+
+        /*
+            Change correct answer
+            to new A/B/C/D position.
+        */
+
+        question.answer =
+            String.fromCharCode(
+                65 + correctIndex
+            );
+
+    });
+
+
+    /*
+        Shuffle the complete question order.
+    */
+
+    shuffleArray(questions);
+}
+
+
+
+/* =====================================================
+   GRAPH POINTS
+   ===================================================== */
+
+const graphPoints = {};
+
+
+/* Graph equations */
+
+const graphEquations = {
+
+    28: {
+        slope: 1.5,
+        intercept: 0
+    },
+
+    29: {
+        slope: -1,
+        intercept: 3
+    },
+
+    30: {
+        slope: 2,
+        intercept: 1
+    }
+
+};
+
+
+
+/* =====================================================
+   CREATE QUESTIONS
+   ===================================================== */
+
+function createQuestions() {
+
+    const container =
+        document.getElementById(
+            "questions"
+        );
+
+    container.innerHTML = "";
+
+
+    questions.forEach(
+        (question, index) => {
+
+            const number =
+                index + 1;
+
+
+            const card =
+                document.createElement(
+                    "section"
+                );
+
+
+            card.className =
+                "question-card";
+
+
+            card.dataset.question =
+                number;
+
+
+            let html = `
+
+                <div class="question-header">
+
+                    <span class="question-number">
+                        Question ${number} of 30
+                    </span>
+
+                    <span class="topic">
+                        ${question.topic}
+                    </span>
+
+                </div>
+
+
+                <div class="question-text">
+
+                    ${question.question}
+
+                </div>
+
+            `;
+
+
+            /*
+                GRAPH QUESTION
+            */
+
+            if (
+                question.topic ===
+                "Graphing"
+            ) {
+
+                graphPoints[number] =
+                    [];
+
+
+                html += `
+
+                    <div class="graph-instruction">
+
+                        Click on points that lie
+                        on the line.
+
+                        Select at least two points.
+
+                    </div>
+
+
+                    <div class="graph-area">
+
+                        <canvas
+                            id="graph${number}"
+                            width="500"
+                            height="500">
+                        </canvas>
+
+                    </div>
+
+
+                    <div
+                        class="selected-points"
+                        id="points${number}">
+
+                        Selected points: none
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /*
+                ANSWER OPTIONS
+            */
+
+            html += `
+                <div class="options">
+            `;
+
+
+            question.options.forEach(
+                (option, optionIndex) => {
+
+                    const letter =
+                        String.fromCharCode(
+                            65 + optionIndex
+                        );
+
+
+                    html += `
+
+                        <label class="option">
+
+                            <input
+                                type="radio"
+                                name="question${number}"
+                                value="${letter}">
+
+                            <span>
+
+                                <strong>
+                                    ${letter}.
+                                </strong>
+
+                                ${option}
+
+                            </span>
+
+                        </label>
+
+                    `;
+
+                }
+            );
+
+
+            html += `
+                </div>
+            `;
+
+
+            /*
+                BUTTONS
+            */
+
+            html += `
+
+                <div class="action-buttons">
+
+                    <button
+                        class="check-button"
+                        onclick="checkCurrentQuestion()">
+
+                        Check Answer
+
+                    </button>
+
+
+                    <button
+                        class="clear-button"
+                        onclick="clearCurrentQuestion()">
+
+                        Clear
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="answer-result"
+                    id="result${number}">
+                </div>
+
+
+                <div
+                    class="explanation"
+                    id="explanation${number}">
+
+                    <strong>
+                        Explanation:
+                    </strong>
+
+                    ${question.explanation}
+
+                </div>
+
+            `;
+
+
+            card.innerHTML =
+                html;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   QUESTION BUTTONS
+   ===================================================== */
+
+function createQuestionButtons() {
+
+    const container =
+        document.getElementById(
+            "questionButtons"
+        );
+
+
+    container.innerHTML = "";
+
+
+    questions.forEach(
+        (question, index) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "question-button";
+
+
+            button.textContent =
+                index + 1;
+
+
+            button.onclick =
+                function() {
+
+                    if (!submitted) {
+
+                        showQuestion(index);
+
+                    }
+
+                };
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   SHOW QUESTION
+   ===================================================== */
+
+function showQuestion(index) {
+
+    if (submitted) {
+        return;
+    }
+
+
+    if (index < 0) {
+        index = 0;
+    }
+
+
+    if (index >= questions.length) {
+        index =
+            questions.length - 1;
+    }
+
+
+    currentQuestion =
+        index;
+
+
+    document
+        .querySelectorAll(
+            ".question-card"
+        )
+        .forEach(card => {
+
+            card.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    const card =
+        document.querySelector(
+            `[data-question="${index + 1}"]`
+        );
+
+
+    if (card) {
+
+        card.classList.add(
+            "active"
+        );
+
+    }
+
+
+    document.getElementById(
+        "questionNumber"
+    ).textContent =
+        `Question ${index + 1} of 30`;
+
+
+    updateNavigation();
+
+
+    /*
+        Draw graph if this is
+        a graph question.
+    */
+
+    if (
+        questions[index].topic ===
+        "Graphing"
+    ) {
+
+        drawGraph(
+            index + 1
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   NEXT
+   ===================================================== */
+
+function nextQuestion() {
+
+    if (submitted) {
+        return;
+    }
+
+
+    if (
+        currentQuestion <
+        questions.length - 1
+    ) {
+
+        showQuestion(
+            currentQuestion + 1
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PREVIOUS
+   ===================================================== */
+
+function previousQuestion() {
+
+    if (submitted) {
+        return;
+    }
+
+
+    if (
+        currentQuestion > 0
+    ) {
+
+        showQuestion(
+            currentQuestion - 1
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CHECK ANSWER
+   ===================================================== */
+
+function checkCurrentQuestion() {
+
+    if (submitted) {
+        return;
+    }
+
+
+    const number =
+        currentQuestion + 1;
+
+
+    const question =
+        questions[
+            currentQuestion
+        ];
+
+
+    /*
+        GRAPH QUESTION
+    */
+
+    if (
+        question.topic ===
+        "Graphing"
+    ) {
+
+        checkGraph(
+            number
+        );
+
+        return;
+
+    }
+
+
+    const selected =
+        document.querySelector(
+            `input[name="question${number}"]:checked`
+        );
+
+
+    const result =
+        document.getElementById(
+            `result${number}`
+        );
+
+
+    const explanation =
+        document.getElementById(
+            `explanation${number}`
+        );
+
+
+    if (!selected) {
+
+        result.textContent =
+            "Please select an answer.";
+
+
+        result.className =
+            "answer-result incorrect";
+
+
+        return;
+
+    }
+
+
+    if (
+        selected.value ===
+        question.answer
+    ) {
+
+        result.textContent =
+            "✓ Correct!";
+
+
+        result.className =
+            "answer-result correct";
+
+    } else {
+
+        result.textContent =
+            "✗ Incorrect. Try again.";
+
+
+        result.className =
+            "answer-result incorrect";
+
+    }
+
+
+    explanation.style.display =
+        "block";
+
+
+    updateNavigation();
+
+}
+
+
+
+/* =====================================================
+   CLEAR QUESTION
+   ===================================================== */
+
+function clearCurrentQuestion() {
+
+    if (submitted) {
+        return;
+    }
+
+
+    const number =
+        currentQuestion + 1;
+
+
+    const question =
+        questions[
+            currentQuestion
+        ];
+
+
+    if (
+        question.topic ===
+        "Graphing"
+    ) {
+
+        graphPoints[number] =
+            [];
+
+
+        drawGraph(number);
+
+    }
+
+
+    document
+        .querySelectorAll(
+            `input[name="question${number}"]`
+        )
+        .forEach(
+            input => {
+
+                input.checked =
+                    false;
+
+            }
+        );
+
+
+    document.getElementById(
+        `result${number}`
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        `result${number}`
+    ).className =
+        "answer-result";
+
+
+    document.getElementById(
+        `explanation${number}`
+    ).style.display =
+        "none";
+
+
+    updateNavigation();
+
+}
+
+
+
+/* =====================================================
+   PROGRESS
+   ===================================================== */
+
+function updateNavigation() {
+
+    let answered = 0;
+
+
+    questions.forEach(
+        (question, index) => {
+
+            const number =
+                index + 1;
+
+
+            if (
+                question.topic ===
+                "Graphing"
+            ) {
+
+                if (
+                    graphPoints[number] &&
+                    graphPoints[number]
+                        .length >= 2
+                ) {
+
+                    answered++;
+
+                }
+
+            } else {
+
+                const selected =
+                    document.querySelector(
+                        `input[name="question${number}"]:checked`
+                    );
+
+
+                if (selected) {
+
+                    answered++;
+
+                }
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `${answered} / 30 answered`;
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        `${answered / 30 * 100}%`;
+
+
+    document
+        .querySelectorAll(
+            ".question-button"
+        )
+        .forEach(
+            (button, index) => {
+
+                const number =
+                    index + 1;
+
+
+                button.classList.toggle(
+                    "active",
+                    number ===
+                    currentQuestion + 1
+                );
+
+
+                const question =
+                    questions[index];
+
+
+                let answeredQuestion =
+                    false;
+
+
+                if (
+                    question.topic ===
+                    "Graphing"
+                ) {
+
+                    answeredQuestion =
+                        graphPoints[number] &&
+                        graphPoints[number]
+                            .length >= 2;
+
+                } else {
+
+                    answeredQuestion =
+                        !!document.querySelector(
+                            `input[name="question${number}"]:checked`
+                        );
+
+                }
+
+
+                button.classList.toggle(
+                    "answered",
+                    answeredQuestion
+                );
+
+            }
+    );
+
+}
+
+
+
+/* =====================================================
+   ONE-TIME SUBMIT
+   ===================================================== */
+
+function submitTest() {
+
+    /*
+        IMPORTANT:
+        If already submitted,
+        do nothing.
+    */
+
+    if (submitted) {
+
+        alert(
+            "The test has already been submitted."
+        );
+
+        return;
+
+    }
+
+
+    submitted = true;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    let score = 0;
+
+
+    questions.forEach(
+        (question, index) => {
+
+            const number =
+                index + 1;
+
+
+            /*
+                GRAPH
+            */
+
+            if (
+                question.topic ===
+                "Graphing"
+            ) {
+
+                if (
+                    graphIsCorrect(
+                        number
+                    )
+                ) {
+
+                    score++;
+
+                }
+
+
+                return;
+
+            }
+
+
+            /*
+                MULTIPLE CHOICE
+            */
+
+            const selected =
+                document.querySelector(
+                    `input[name="question${number}"]:checked`
+                );
+
+
+            if (
+                selected &&
+                selected.value ===
+                question.answer
+            ) {
+
+                score++;
+
+            }
+
+        }
+    );
+
+
+    /*
+        SHOW RESULT
+    */
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        `Final Score: ${score} / 30`;
+
+
+    const percentage =
+        Math.round(
+            score / 30 * 100
+        );
+
+
+    document.getElementById(
+        "finalMessage"
+    ).textContent =
+        `You scored ${percentage}%. The test is now closed.`;
+
+
+    /*
+        Disable everything.
+    */
+
+    document
+        .querySelectorAll(
+            "input"
+        )
+        .forEach(
+            input => {
+
+                input.disabled =
+                    true;
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            "button"
+        )
+        .forEach(
+            button => {
+
+                if (
+                    !button.classList.contains(
+                        "question-button"
+                    )
+                ) {
+
+                    button.disabled =
+                        true;
+
+                }
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".question-button"
+        )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    true;
+
+            }
+        );
+
+
+    /*
+        Show final result.
+    */
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* =====================================================
+   TIMER
+   ===================================================== */
+
+function startTimer() {
+
+    timeLeft = 40;
+
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    timer.textContent =
+        timeLeft;
+
+
+    timerInterval =
+        setInterval(
+            function() {
+
+                if (submitted) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+                    return;
+
+                }
+
+
+                timeLeft--;
+
+
+                timer.textContent =
+                    timeLeft;
+
+
+                /*
+                    Warning when
+                    10 seconds remain.
+                */
+
+                if (
+                    timeLeft <= 10
+                ) {
+
+                    document
+                        .querySelector(
+                            ".timer-box"
+                        )
+                        .classList.add(
+                            "timer-warning"
+                        );
+
+                }
+
+
+                /*
+                    TIME FINISHED
+                */
+
+                if (
+                    timeLeft <= 0
+                ) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+
+                    alert(
+                        "Time is finished. Your test will be submitted automatically."
+                    );
+
+
+                    submitTest();
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+
+/* =====================================================
+   GRAPH FUNCTIONS
+   ===================================================== */
+
+function drawGraph(
+    questionNumber
+) {
+
+    const canvas =
+        document.getElementById(
+            `graph${questionNumber}`
+        );
+
+
+    if (!canvas) {
+        return;
+    }
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    const centerX = 250;
+
+    const centerY = 250;
+
+    const scale = 25;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        500,
+        500
+    );
+
+
+    /*
+        GRID
+    */
+
+    ctx.strokeStyle =
+        "#dddddd";
+
+
+    ctx.lineWidth = 1;
+
+
+    for (
+        let x = 0;
+        x <= 500;
+        x += scale
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            0
+        );
+
+        ctx.lineTo(
+            x,
+            500
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    for (
+        let y = 0;
+        y <= 500;
+        y += scale
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            y
+        );
+
+        ctx.lineTo(
+            500,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+        AXES
+    */
+
+    ctx.strokeStyle =
+        "#222";
+
+
+    ctx.lineWidth = 2;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        centerY
+    );
+
+    ctx.lineTo(
+        500,
+        centerY
+    );
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        centerX,
+        0
+    );
+
+    ctx.lineTo(
+        centerX,
+        500
+    );
+
+    ctx.stroke();
+
+
+    /*
+        NUMBERS
+    */
+
+    ctx.fillStyle =
+        "#333";
+
+
+    ctx.font =
+        "12px Arial";
+
+
+    for (
+        let n = -10;
+        n <= 10;
+        n++
+    ) {
+
+        if (n === 0) {
+            continue;
+        }
+
+
+        ctx.fillText(
+            n,
+            centerX + n * scale - 4,
+            centerY + 16
+        );
+
+
+        ctx.fillText(
+            n,
+            centerX + 7,
+            centerY - n * scale + 4
+        );
+
+    }
+
+
+    /*
+        SELECTED POINTS
+    */
+
+    if (
+        graphPoints[
+            questionNumber
+        ]
+    ) {
+
+        graphPoints[
+            questionNumber
+        ].forEach(
+            point => {
+
+                const screenX =
+                    centerX +
+                    point.x *
+                    scale;
+
+
+                const screenY =
+                    centerY -
+                    point.y *
+                    scale;
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    screenX,
+                    screenY,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fillStyle =
+                    "#e53935";
+
+
+                ctx.fill();
+
+            }
+        );
+
+    }
+
+
+    /*
+        POINT DISPLAY
+    */
+
+    const display =
+        document.getElementById(
+            `points${questionNumber}`
+        );
+
+
+    if (!display) {
+        return;
+    }
+
+
+    if (
+        !graphPoints[
+            questionNumber
+        ] ||
+        graphPoints[
+            questionNumber
+        ].length === 0
+    ) {
+
+        display.textContent =
+            "Selected points: none";
+
+    } else {
+
+        display.textContent =
+            "Selected points: " +
+            graphPoints[
+                questionNumber
+            ]
+            .map(
+                p =>
+                    `(${p.x}, ${p.y})`
+            )
+            .join(", ");
+
+    }
+
+}
+
+
+
+/* =====================================================
+   GRAPH CLICK
+   ===================================================== */
+
+function addGraphPoint(
+    questionNumber,
+    event
+) {
+
+    if (submitted) {
+        return;
+    }
+
+
+    const canvas =
+        document.getElementById(
+            `graph${questionNumber}`
+        );
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const scale = 25;
+
+
+    const centerX = 250;
+
+    const centerY = 250;
+
+
+    const mouseX =
+        (event.clientX -
+        rect.left) *
+        (canvas.width /
+        rect.width);
+
+
+    const mouseY =
+        (event.clientY -
+        rect.top) *
+        (canvas.height /
+        rect.height);
+
+
+    const x =
+        Math.round(
+            (mouseX - centerX) /
+            scale
+        );
+
+
+    const y =
+        Math.round(
+            (centerY - mouseY) /
+            scale
+        );
+
+
+    if (
+        x < -10 ||
+        x > 10 ||
+        y < -10 ||
+        y > 10
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !graphPoints[
+            questionNumber
+        ]
+    ) {
+
+        graphPoints[
+            questionNumber
+        ] = [];
+
+    }
+
+
+    const exists =
+        graphPoints[
+            questionNumber
+        ].some(
+            point =>
+                point.x === x &&
+                point.y === y
+        );
+
+
+    if (!exists) {
+
+        graphPoints[
+            questionNumber
+        ].push({
+            x: x,
+            y: y
+        });
+
+    }
+
+
+    drawGraph(
+        questionNumber
+    );
+
+
+    updateNavigation();
+
+}
+
+
+
+/* =====================================================
+   GRAPH CHECK
+   ===================================================== */
+
+function graphIsCorrect(
+    questionNumber
+) {
+
+    const points =
+        graphPoints[
+            questionNumber
+        ];
+
+
+    if (
+        !points ||
+        points.length < 2
+    ) {
+
+        return false;
+
+    }
+
+
+    /*
+        Find which original graph
+        this shuffled question was.
+    */
+
+    const question =
+        questions[
+            questionNumber - 1
+        ];
+
+
+    const equation =
+        graphEquations[
+            question.graphId
+        ];
+
+
+    if (!equation) {
+        return false;
+    }
+
+
+    return points.every(
+        point => {
+
+            const expectedY =
+                equation.slope *
+                point.x +
+                equation.intercept;
+
+
+            return (
+                Math.abs(
+                    point.y -
+                    expectedY
+                ) < 0.001
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   CHECK GRAPH
+   ===================================================== */
+
+function checkGraph(
+    questionNumber
+) {
+
+    if (submitted) {
+        return;
+    }
+
+
+    const result =
+        document.getElementById(
+            `result${questionNumber}`
+        );
+
+
+    const explanation =
+        document.getElementById(
+            `explanation${questionNumber}`
+        );
+
+
+    if (
+        !graphPoints[
+            questionNumber
+        ] ||
+        graphPoints[
+            questionNumber
+        ].length < 2
+    ) {
+
+        result.textContent =
+            "Please select at least two points.";
+
+
+        result.className =
+            "answer-result incorrect";
+
+
+        return;
+
+    }
+
+
+    if (
+        graphIsCorrect(
+            questionNumber
+        )
+    ) {
+
+        result.textContent =
+            "✓ Correct!";
+
+
+        result.className =
+            "answer-result correct";
+
+    } else {
+
+        result.textContent =
+            "✗ Incorrect. Try again.";
+
+
+        result.className =
+            "answer-result incorrect";
+
+    }
+
+
+    explanation.style.display =
+        "block";
+
+}
+
+
+
+/* =====================================================
+   GRAPH CLICK EVENT
+   ===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target.tagName !==
+            "CANVAS"
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !event.target.id.startsWith(
+                "graph"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const number =
+            Number(
+                event.target.id.replace(
+                    "graph",
+                    ""
+                )
+            );
+
+
+        addGraphPoint(
+            number,
+            event
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   RADIO CHANGE
+   ===================================================== */
+
+document.addEventListener(
+    "change",
+    function() {
+
+        if (!submitted) {
+
+            updateNavigation();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   START TEST
+   ===================================================== */
+
+prepareQuestions();
+
+createQuestions();
+
+createQuestionButtons();
+
+showQuestion(0);
+
+updateNavigation();
+
+startTimer();
